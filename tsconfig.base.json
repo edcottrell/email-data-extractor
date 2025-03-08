@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "lib": ["es2022","dom"],
+    "module": "ES2022",
+    "target": "ES2022",
+    "preserveConstEnums": true,
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "sourceMap": true,
+    "types": ["node", "jest"],
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths" : {
+      "*": ["*"],
+      "@app/*": ["src/*.ts"],
+      "@test/*": ["test/*.ts"],
+      "@test-utils/*": ["test/test-utils/*.ts"]
+    },
+    "allowJs": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "types"]
+}
