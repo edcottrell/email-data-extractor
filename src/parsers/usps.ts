@@ -1,0 +1,58 @@
+import {Package, ZPackage,} from '@app/parser-types/package';
+import { Parser, } from '@app/parser';
+import {z} from "zod";
+
+export const ZPackageUSPS = ZPackage.extend({
+  number : z.string().refine(n => !!n.match(/^\d{10,22}$/)),
+  carrier: z.literal('USPS'),
+});
+
+export type PackageUSPS = z.infer<typeof ZPackageUSPS>;
+
+export const ParserUSPSSingle : Parser = {
+  description: 'Parse single-package-tracking emails from USPS',
+  emailType: ['html'],
+  name: 'USPS Single-Package-Tracking Parser',
+  parser: (message : string) : PackageUSPS[] | null => {
+    const trackingNumberAndShipper = message.match(/(?<trackingNumber>\d{15,})(?:<[^>]+>\s*)+Package Shipped from: <strong>(?<shipper>[^<>]+)/i);
+    if (!trackingNumberAndShipper) {
+      return null;
+    }
+    return [{
+      number : trackingNumberAndShipper.groups?.trackingNumber,
+      shipper : trackingNumberAndShipper.groups?.shipper,
+      carrier : 'USPS',
+    } as PackageUSPS];
+  },
+  version: '0.1',
+}
+
+export const ParserUSPSMultiple : Parser = {
+  description: 'Parse multiple-package-tracking emails from USPS',
+  emailType: ['html'],
+  name: 'USPS Multiple-Package-Tracking Parser',
+  parser: (message : string) : PackageUSPS[] | null => {
+    const trackingNumberAndShipper = message.matchAll(/<td[^>]+>(?:<[^<>]+>|FROM: )+(?:<[^<>]+>)+(?<shipper>[^<>]+)(?:<[^<>]+>|\s)+(?<trackingNumber>\d{15,})/gi);
+    if (!trackingNumberAndShipper) {
+      return null;
+    }
+    return [...trackingNumberAndShipper].map(tns => {
+      return {
+        number : tns.groups?.trackingNumber,
+        shipper : tns.groups?.shipper,
+        carrier : 'USPS',
+      } as PackageUSPS;
+    });
+  },
+  version: '0.1',
+}
+
+export const ParserUSPS : Parser = {
+  description: 'Parse generic package-tracking emails from USPS',
+  emailType: ['html'],
+  name: 'USPS Generic Package-Tracking Parser',
+  parser: (message : string) : Package[] | null => {
+    return ParserUSPSSingle.parser(message) || ParserUSPSMultiple.parser(message);
+  },
+  version: '0.1',
+}

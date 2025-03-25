@@ -10,7 +10,7 @@
     "sourceMap": true,
     "types": ["node", "jest"],
     "skipLibCheck": true,
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths" : {
       "*": ["*"],
       "@app/*": ["src/*.ts"],

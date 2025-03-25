@@ -25,9 +25,9 @@
   "scripts": {
     "build": "tsc --build",
     "build-test": "tsc --build && tsc --project tsconfig.test.json",
-    "jest-with-tla-support": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "jest-with-tla-support": "ts-node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test": "npm run build-test && npm run jest-with-tla-support",
-    "run": "node dist/parser.js",
+    "run": "npx tsx src/index.ts",
     "prepare": "husky"
   },
   "main": "./dist/index",
