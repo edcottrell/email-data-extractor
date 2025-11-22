@@ -20,7 +20,7 @@ export const ParserUSPSSingle : Parser = {
     }
     return [{
       number : trackingNumberAndShipper.groups?.trackingNumber,
-      shipper : trackingNumberAndShipper.groups?.shipper,
+      shipper : trackingNumberAndShipper.groups?.shipper.replace(/^\s+|\s+$/gi, ''),
       carrier : 'USPS',
     } as PackageUSPS];
   },
@@ -39,7 +39,7 @@ export const ParserUSPSMultiple : Parser = {
     return [...trackingNumberAndShipper].map(tns => {
       return {
         number : tns.groups?.trackingNumber,
-        shipper : tns.groups?.shipper,
+        shipper : tns.groups?.shipper.replace(/^\s+|\s+$/gi, ''),
         carrier : 'USPS',
       } as PackageUSPS;
     });

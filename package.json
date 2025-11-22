@@ -25,7 +25,7 @@
   "scripts": {
     "build": "tsc --build",
     "build-test": "tsc --build && tsc --project tsconfig.test.json",
-    "jest-with-tla-support": "ts-node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "jest-with-tla-support": "tsx --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test": "npm run build-test && npm run jest-with-tla-support",
     "run": "npx tsx src/index.ts",
     "prepare": "husky"
@@ -39,5 +39,6 @@
     "trailingComma": "all",
     "bracketSpacing": true,
     "printWidth": 80
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }
