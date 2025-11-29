@@ -6,7 +6,7 @@ import fs from "node:fs";
 
 export const defaultParsers = [PackageTrackingParser];
 
-async function parse(message : Buffer, parsers? : Parser[]) : Promise<ParsedData[] | null> {
+async function parse(message : Buffer, parsers? : Parser[]) : Promise<ParsedData | null> {
   if (!parsers) {
     parsers = defaultParsers;
   }
@@ -16,13 +16,17 @@ async function parse(message : Buffer, parsers? : Parser[]) : Promise<ParsedData
   if (typeof parsed.html !== 'string') {
     throw new Error("Couldn't extract HTML body from message");
   }
+  const output : ParsedData = JSON.parse(JSON.stringify(parsed));
   for (parserIndex = 0; parserIndex < parserCount; parserIndex++) {
-    const result = parsers[parserIndex].parser(parsed.html);
+    const result = parsers[parserIndex].parser(parsed);
     if (result) {
-      return result;
+      if (!Object.prototype.hasOwnProperty.call(output, 'custom')) {
+        output.custom = {};
+      }
+      output.custom = { ...output.custom, ...result };
     }
   }
-  return null;
+  return parsed;
 }
 
 export async function loadAndParseTestFile(path : string) {
