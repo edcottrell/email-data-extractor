@@ -1,7 +1,8 @@
 import {ParserUPS, } from "@app/parsers/ups";
 import {ParserUSPSMultiple, ParserUSPSSingle} from "@app/parsers/usps";
 import { CustomDataPackagesArray, } from '@app/parser-types/package';
-import { messageHasHtml, ParsedMail, Parser, } from '@app/parser';
+import { messageHasHtml, Parser, } from '@app/parser';
+import { ParsedMail, } from 'mailparser';
 
 export const PackageTrackingParser : Parser = {
   description: 'Parse package-tracking emails',

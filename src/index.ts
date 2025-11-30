@@ -2,7 +2,9 @@ import { PackageTrackingParser } from "@app/parser-bundles/package-tracking";
 import { ParsedData, Parser } from "@app/parser";
 import { simpleParser } from "mailparser";
 import fs from "node:fs";
+import { parseCommandLine } from "@app/parseCommandLine";
 
+const argv = await parseCommandLine(process.argv.slice(2));
 
 export const defaultParsers = [PackageTrackingParser];
 
@@ -26,10 +28,18 @@ async function parse(message : Buffer, parsers? : Parser[]) : Promise<ParsedData
       output.custom = { ...output.custom, ...result };
     }
   }
-  return parsed;
+  return output;
 }
 
-export async function loadAndParseTestFile(path : string) {
+export async function loadAndParseFile(path : string) {
   const fileContents = fs.readFileSync(path);
   return await parse(fileContents);
+}
+
+if (argv.input) {
+  argv.input.forEach(async (file) => {
+    const parsed = await loadAndParseFile(file);
+    const jsonOutput = JSON.stringify(parsed, null, 2);
+    console.log(jsonOutput);
+  });
 }
