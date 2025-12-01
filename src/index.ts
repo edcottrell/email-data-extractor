@@ -2,13 +2,13 @@ import { PackageTrackingParser } from "@app/parser-bundles/package-tracking";
 import { ParsedData, Parser } from "@app/parser";
 import { simpleParser } from "mailparser";
 import fs from "node:fs";
-import { parseCommandLine } from "@app/parseCommandLine";
+import { getPipedInput, parseCommandLine } from "@app/parseCommandLine";
 
 const argv = await parseCommandLine(process.argv.slice(2));
 
 export const defaultParsers = [PackageTrackingParser];
 
-async function parse(message : Buffer, parsers? : Parser[]) : Promise<ParsedData | null> {
+async function parse(message : Buffer | string, parsers? : Parser[]) : Promise<ParsedData | null> {
   if (!parsers) {
     parsers = defaultParsers;
   }
@@ -36,8 +36,20 @@ export async function loadAndParseFile(path : string) {
   return await parse(fileContents);
 }
 
-export async function parseAllInputFiles(): Promise<(ParsedData | null)[] | ParsedData | null> {
+export async function processAllInput(): Promise<(ParsedData | null)[] | ParsedData | null> {
+  const piped = await getPipedInput();
   const parsedInputs: (ParsedData | null)[] = [];
+  if (piped !== undefined) {
+    const parsedPiped = await parse(piped);
+    parsedInputs.push(parsedPiped);
+  }
+  return await parseAllInputFiles(parsedInputs);
+}
+
+export async function parseAllInputFiles(parsedInputs: (ParsedData | null)[] | null = null): Promise<(ParsedData | null)[] | ParsedData | null> {
+  if (parsedInputs === null) {
+    parsedInputs = [];
+  }
   if (argv.input) {
     for (const file of argv.input) {
       const parsed = await loadAndParseFile(file);
@@ -51,4 +63,5 @@ export async function parseAllInputFiles(): Promise<(ParsedData | null)[] | Pars
   }
 }
 
-console.log(JSON.stringify(await parseAllInputFiles(), null, 2));
+const result = await processAllInput();
+console.log(JSON.stringify(result, null, 2));
