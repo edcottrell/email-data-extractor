@@ -36,10 +36,19 @@ export async function loadAndParseFile(path : string) {
   return await parse(fileContents);
 }
 
-if (argv.input) {
-  argv.input.forEach(async (file) => {
-    const parsed = await loadAndParseFile(file);
-    const jsonOutput = JSON.stringify(parsed, null, 2);
-    console.log(jsonOutput);
-  });
+export async function parseAllInputFiles(): Promise<(ParsedData | null)[] | ParsedData | null> {
+  const parsedInputs: (ParsedData | null)[] = [];
+  if (argv.input) {
+    for (const file of argv.input) {
+      const parsed = await loadAndParseFile(file);
+      parsedInputs.push(parsed);
+    }
+  }
+  switch (parsedInputs.length) {
+    case 0: return null;
+    case 1: return parsedInputs[0];
+    default: return parsedInputs;
+  }
 }
+
+console.log(JSON.stringify(await parseAllInputFiles(), null, 2));
