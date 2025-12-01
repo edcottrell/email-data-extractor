@@ -2,7 +2,6 @@ import yargs from 'yargs';
 import process from "node:process";
 
 export type LaunchOptions = {
-  format?: (string | number)[] | string;
   input?: string[];
   verbose?: boolean;
 };
@@ -44,13 +43,6 @@ export async function getPipedInput() : Promise<string | undefined> {
 /* istanbul ignore next */
 export async function parseCommandLine(args: string[]): Promise<Arguments> {
   return yargs(args)
-    .array('format')
-    .option('format', {
-      alias: 'f',
-      type: 'array',
-      description: 'Specify a report format',
-      default: 'date project tag description entry',
-    })
     .array('input')
     .option('input', {
       alias: 'i',
