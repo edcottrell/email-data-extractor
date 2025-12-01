@@ -1,5 +1,5 @@
-import { CustomDataPackagesArray, ZPackage, } from '@app/parser-types/package';
-import { messageHasHtml, Parser, } from '@app/parser';
+import { CustomDataPackagesArray, ZPackage, } from '../parser-types/package';
+import { messageHasHtml, Parser, } from '../parser';
 import {z} from "zod";
 import { ParsedMail } from "mailparser";
 

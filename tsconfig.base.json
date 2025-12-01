@@ -10,13 +10,6 @@
     "sourceMap": true,
     "types": ["node", "jest"],
     "skipLibCheck": true,
-    "baseUrl": "./",
-    "paths" : {
-      "*": ["*"],
-      "@app/*": ["src/*.ts"],
-      "@test/*": ["test/*.ts"],
-      "@test-utils/*": ["test/test-utils/*.ts"]
-    },
     "allowJs": true
   },
   "include": ["src/**/*"],

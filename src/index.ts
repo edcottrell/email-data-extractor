@@ -1,8 +1,8 @@
-import { PackageTrackingParser } from "@app/parser-bundles/package-tracking";
-import { ParsedData, Parser } from "@app/parser";
+import { PackageTrackingParser } from "./parser-bundles/package-tracking";
+import { ParsedData, Parser } from "./parser";
 import { simpleParser } from "mailparser";
 import fs from "node:fs";
-import { getPipedInput, parseCommandLine } from "@app/parseCommandLine";
+import { getPipedInput, parseCommandLine } from "./parseCommandLine";
 
 const argv = await parseCommandLine(process.argv.slice(2));
 
