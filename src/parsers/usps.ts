@@ -41,12 +41,12 @@ export const ParserUSPSMultiple : Parser = {
     if (typeof message.html !== 'string') {
       return null;
     }
-    const trackingNumberAndShipper = message.html.matchAll(/<td[^>]+>(?:<[^<>]+>|FROM: )+(?:<[^<>]+>)+(?<shipper>[^<>]+)(?:<[^<>]+>|\s)+(?<trackingNumber>\d{15,})/gi);
-    if (!trackingNumberAndShipper) {
+    const trackingNumberAndShipper = Array.from(message.html.matchAll(/<td[^>]+>(?:<[^<>]+>|FROM: )+(?:<[^<>]+>)+(?<shipper>[^<>]+)(?:<[^<>]+>|\s)+(?<trackingNumber>\d{15,})/gi));
+    if (!trackingNumberAndShipper || trackingNumberAndShipper.length === 0) {
       return null;
     }
     return {
-      packages : [...trackingNumberAndShipper].map(tns => {
+      packages : trackingNumberAndShipper.map(tns => {
         return {
             number : tns.groups?.trackingNumber,
             shipper : tns.groups?.shipper.replace(/^\s+|\s+$/gi, ''),
