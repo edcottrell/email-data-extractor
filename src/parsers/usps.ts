@@ -1,6 +1,6 @@
-import { CustomDataPackagesArray, ZPackage,} from '../parser-types/package';
+import { CustomDataPackagesArray, ZPackage,} from '../parser-types/package.ts';
 import { ParsedMail, } from 'mailparser';
-import { Parser, } from '../parser';
+import { Parser, } from '../parser.ts';
 import {z} from "zod";
 
 export const ZPackageUSPS = ZPackage.extend({

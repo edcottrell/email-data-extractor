@@ -1,7 +1,7 @@
-import {ParserUPS, } from "../parsers/ups";
-import {ParserUSPSMultiple, ParserUSPSSingle} from "../parsers/usps";
-import { CustomDataPackagesArray, } from '../parser-types/package';
-import { messageHasHtml, Parser, } from '../parser';
+import {ParserUPS, } from "../parsers/ups.ts";
+import {ParserUSPSMultiple, ParserUSPSSingle} from "../parsers/usps.ts";
+import { CustomDataPackagesArray, } from '../parser-types/package.ts';
+import { messageHasHtml, Parser, } from '../parser.ts';
 import { ParsedMail, } from 'mailparser';
 
 export const PackageTrackingParser : Parser = {
@@ -17,5 +17,5 @@ export const PackageTrackingParser : Parser = {
   version: '0.1',
 }
 
-export * from "../parsers/ups";
-export * from "../parsers/usps";
+export * from "../parsers/ups.ts";
+export * from "../parsers/usps.ts";

@@ -5,7 +5,7 @@
   "dependencies": {
     "@types/mailparser": "^3.4.5",
     "mailparser": "^3.7.2",
-    "typescript": "^4.9.4",
+    "typescript": "^5.9.3",
     "yargs": "^17.6.0",
     "zod": "^3.23.8"
   },
@@ -23,8 +23,8 @@
     "tsx": "^4.7.1"
   },
   "scripts": {
-    "build": "tsc --build",
-    "build-test": "tsc --build && tsc --project tsconfig.test.json",
+    "build": "npx tsc --build --rewriteRelativeImportExtensions",
+    "build-test": "npx tsc --build --rewriteRelativeImportExtensions && npx tsc --rewriteRelativeImportExtensions --project tsconfig.test.json",
     "jest-with-tla-support": "tsx --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test": "npm run build-test && npm run jest-with-tla-support",
     "run": "npx tsx src/index.ts",
