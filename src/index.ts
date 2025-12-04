@@ -15,9 +15,6 @@ async function parse(message : Buffer | string, parsers? : Parser[]) : Promise<P
   let parserIndex = 0;
   const parserCount = parsers.length;
   const parsed = await simpleParser(message);
-  if (typeof parsed.html !== 'string') {
-    throw new Error("Couldn't extract HTML body from message");
-  }
   const output : ParsedData = JSON.parse(JSON.stringify(parsed));
   for (parserIndex = 0; parserIndex < parserCount; parserIndex++) {
     const result = parsers[parserIndex].parser(parsed);
@@ -39,7 +36,7 @@ export async function loadAndParseFile(path : string) {
 export async function processAllInput(): Promise<(ParsedData | null)[] | ParsedData | null> {
   const piped = await getPipedInput();
   const parsedInputs: (ParsedData | null)[] = [];
-  if (piped !== undefined) {
+  if (piped !== undefined && piped !== '') {
     const parsedPiped = await parse(piped);
     parsedInputs.push(parsedPiped);
   }
@@ -51,8 +48,8 @@ export async function parseAllInputFiles(parsedInputs: (ParsedData | null)[] | n
     parsedInputs = [];
   }
   if (argv.input) {
-    for (const file of argv.input) {
-      const parsed = await loadAndParseFile(file);
+    for (let index = 0; index < argv.input.length; index++) {
+      const parsed = await loadAndParseFile(argv.input[index]);
       parsedInputs.push(parsed);
     }
   }
